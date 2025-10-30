@@ -1,0 +1,8 @@
+# TEST API - using Rest Client
+
+# GET the root
+GET http://localhost:3000/
+
+###
+
+
