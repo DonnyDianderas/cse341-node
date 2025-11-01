@@ -5,5 +5,13 @@ GET http://localhost:3000/
 
 ###
 
+# GET all contacts
+GET http://localhost:3000/contacts
+
+###
+
+# GET one contact by ID (example: Gabriela)
+GET http://localhost:3000/contacts/6902cb23305dfb55027e992f
+
 
 
