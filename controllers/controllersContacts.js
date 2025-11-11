@@ -1,7 +1,9 @@
 const mongodb = require('../data/database');
 const ObjectId = require('mongodb').ObjectId;
 
+// Get all register (using GET)
 const getAll = async (req, res) => {
+  //#swagger.tags=['Contacts']
   const result = await mongodb.getDatabase().db().collection('contacts').find();
   result.toArray().then((contacts) => {
     res.setHeader('Content-Type', 'application/json');
@@ -9,7 +11,9 @@ const getAll = async (req, res) => {
   });
 };
 
+// Get one register (using GET)
 const getSingle = async (req, res) => {
+  //#swagger.tags=['Contacts']
   const contactId = new ObjectId(req.params.id);
   const result = await mongodb.getDatabase().db().collection('contacts').find({ _id: contactId });
   result.toArray().then((contacts) => {
@@ -18,7 +22,61 @@ const getSingle = async (req, res) => {
   });
 };
 
+// Create register (using POST)
+const createContact = async (req, res) => {
+   //#swagger.tags=['Contacts']
+  const newContact = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    favoriteColor: req.body.favoriteColor,
+    birthday: req.body.birthday
+  };
+
+  const result = await mongodb.getDatabase().db().collection('contacts').insertOne(newContact);
+  if (result.acknowledged) {
+    res.status(204).json({ id: result.insertedId });
+  } else {
+    res.status(500).json({ message: 'Failed to create contact.' });
+  }
+};
+
+// Update register (using PUT)
+const updateContact = async (req, res) => {
+   //#swagger.tags=['Contacts']
+  const contactId = new ObjectId(req.params.id);
+  const updatedContact = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    favoriteColor: req.body.favoriteColor,
+    birthday: req.body.birthday
+  };
+
+  const result = await mongodb.getDatabase().db().collection('contacts').replaceOne({ _id: contactId }, updatedContact);
+  if (result.modifiedCount > 0) {
+    res.status(204).send(); 
+  } else {
+    res.status(404).json({ message: 'Contact not found.' });
+  }
+};
+
+// Delete register
+const deleteContact = async (req, res) => {
+   //#swagger.tags=['Contacts']
+  const contactId = new ObjectId(req.params.id);
+  const result = await mongodb.getDatabase().db().collection('contacts').deleteOne({ _id: contactId });
+  if (result.deletedCount > 0) {
+    res.status(201).send(); 
+  } else {
+    res.status(404).json({ message: 'Contact not found.' });
+  }
+};
+
 module.exports = {
   getAll,
-  getSingle
+  getSingle,
+  createContact,
+  updateContact,
+  deleteContact
 };
