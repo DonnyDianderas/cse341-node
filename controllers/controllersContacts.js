@@ -23,11 +23,7 @@ const getSingle = async (req, res) => {
 // Create register (using POST)
 const createContact = async (req, res) => {
   const newContact = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
-    favoriteColor: req.body.favoriteColor,
-    birthday: req.body.birthday
+    
   };
 
   if (!newContact.firstName || !newContact.lastName || !newContact.email ||

@@ -44,5 +44,29 @@ Content-Type: application/json
 ###
 
 # DELETE contact
-DELETE http://localhost:3000/contacts/691113ea43580bec90f9a4d5
+DELETE http://localhost:3000/contacts/69168c61f599efda0c58d546
 
+###
+PUT http://localhost:3000/contacts/6902cba2305dfb55027e9930
+Content-Type: application/json
+
+{
+  "firstName": "Julian",
+  "lastName": "Dianderas",
+  "email": "Mateo@gmail.com",
+  "favoriteColor": "Black",
+  "birthday": "2021-07-06"
+}
+
+###
+
+POST http://localhost:3000/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Jhon",
+  "lastName": "Jones",
+  "email": "Dianj@gmail.com",
+  "favoriteColor": "Pink",
+  "birthday": "2001-07-06"
+}
