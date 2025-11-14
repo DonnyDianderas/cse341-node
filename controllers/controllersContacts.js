@@ -3,7 +3,6 @@ const ObjectId = require('mongodb').ObjectId;
 
 // Get all register (using GET)
 const getAll = async (req, res) => {
-  //#swagger.tags=['Contacts']
   const result = await mongodb.getDatabase().db().collection('contacts').find();
   result.toArray().then((contacts) => {
     res.setHeader('Content-Type', 'application/json');
@@ -13,7 +12,6 @@ const getAll = async (req, res) => {
 
 // Get one register (using GET)
 const getSingle = async (req, res) => {
-  //#swagger.tags=['Contacts']
   const contactId = new ObjectId(req.params.id);
   const result = await mongodb.getDatabase().db().collection('contacts').find({ _id: contactId });
   result.toArray().then((contacts) => {
@@ -24,7 +22,6 @@ const getSingle = async (req, res) => {
 
 // Create register (using POST)
 const createContact = async (req, res) => {
-   //#swagger.tags=['Contacts']
   const newContact = {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -33,9 +30,14 @@ const createContact = async (req, res) => {
     birthday: req.body.birthday
   };
 
+  if (!newContact.firstName || !newContact.lastName || !newContact.email ||
+      !newContact.favoriteColor || !newContact.birthday) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
   const result = await mongodb.getDatabase().db().collection('contacts').insertOne(newContact);
   if (result.acknowledged) {
-    res.status(204).json({ id: result.insertedId });
+    res.status(201).json({ id: result.insertedId });  
   } else {
     res.status(500).json({ message: 'Failed to create contact.' });
   }
@@ -43,7 +45,6 @@ const createContact = async (req, res) => {
 
 // Update register (using PUT)
 const updateContact = async (req, res) => {
-   //#swagger.tags=['Contacts']
   const contactId = new ObjectId(req.params.id);
   const updatedContact = {
     firstName: req.body.firstName,
@@ -61,13 +62,12 @@ const updateContact = async (req, res) => {
   }
 };
 
-// Delete register
+// Delete register (using DELETE)
 const deleteContact = async (req, res) => {
-   //#swagger.tags=['Contacts']
   const contactId = new ObjectId(req.params.id);
   const result = await mongodb.getDatabase().db().collection('contacts').deleteOne({ _id: contactId });
   if (result.deletedCount > 0) {
-    res.status(201).send(); 
+    res.status(204).send();   
   } else {
     res.status(404).json({ message: 'Contact not found.' });
   }
@@ -80,3 +80,4 @@ module.exports = {
   updateContact,
   deleteContact
 };
+
